@@ -1,0 +1,15 @@
+.itemDiv{    
+    background-color: azure;
+    color: blue;
+    text-shadow: blueviolet;
+}
+.itemDisplay{
+    color: orange;
+
+}
+.btnBuyDisplay{
+    float: right;
+}
+.btnRmDisplay{
+    float: right;
+}

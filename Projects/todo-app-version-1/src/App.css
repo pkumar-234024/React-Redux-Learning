@@ -1,0 +1,20 @@
+.todo-container{
+    font-size: large;
+    
+}
+.todo-app-name{
+    font-size: large;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 400;
+    font-stretch:wider;
+    background-color: aquamarine;
+    
+}
+.container{
+    text-align: left;
+    
+    
+}
+.todo-input-app{
+        text-align: left;
+}
