@@ -1,26 +1,71 @@
 import { createContext, useReducer } from "react";
+import { DefaultContext } from "react-icons/lib";
 
 export const PostList = createContext({
   postList: [],
   addPost: () => {},
   deletePost: () => {},
+  addMassPost: () => {},
 });
 
 const PostListReducer = (currPostList, action) => {
-  return currPostList;
+  let newPostList = currPostList;
+
+  if (action.type === "ADD_POST") {
+    const newPost = {
+      id: currPostList.length + 1,
+      title: action.payload.postTitle,
+      body: action.payload.postBody,
+      reaction: action.payload.reactions,
+      tags: action.payload.tags,
+      userId: currPostList.length + 100,
+    };
+    newPostList = [...currPostList, newPost];
+  } else if (action.type === "ADD_MASS_POST") {
+    newPostList = action.payload.posts;
+  } else if (action.type === "DELETE_POST") {
+    newPostList = currPostList.filter(
+      (post) => post.id !== action.payload.postId
+    );
+  }
+  return newPostList;
 };
 
 const PostListProvider = ({ children }) => {
-  const addPost = () => {};
+  const addPost = ({ userId, postBody, postTitle, reactions, tags }) => {
+    disPatchPostList({
+      type: "ADD_POST",
+      payload: {
+        userId,
+        postBody,
+        postTitle,
+        reactions,
+        tags,
+      },
+    });
+  };
 
-  const deletePost = () => {};
-  const [postList, disPatchPostList] = useReducer(
-    PostListReducer,
-    DEFAULT_POST_LIST
-  );
+  const addMassPost = (posts) => {
+    disPatchPostList({
+      type: "ADD_MASS_POST",
+      payload: {
+        posts,
+      },
+    });
+  };
+
+  const deletePost = (postId) => {
+    disPatchPostList({
+      type: "DELETE_POST",
+      payload: {
+        postId,
+      },
+    });
+  };
+  const [postList, disPatchPostList] = useReducer(PostListReducer, []);
 
   return (
-    <PostList.Provider value={{ postList, addPost, deletePost }}>
+    <PostList.Provider value={{ postList, addPost, deletePost, addMassPost }}>
       {children}
     </PostList.Provider>
   );
@@ -49,24 +94,24 @@ const DEFAULT_POST_LIST = [
     title: "Title-3",
     body: "3-Some quick example text to build on the card title and make up the bulk of the card's content.",
     reactions: 0,
-    tags: [],
-    userId: "",
+    tags: ["ghd"],
+    userId: "user-1",
   },
   {
     id: "4",
     title: "Title-4",
     body: "4-Some quick example text to build on the card title and make up the bulk of the card's content.",
     reactions: 0,
-    tags: [],
-    userId: "",
+    tags: ["qwqw"],
+    userId: "user-1",
   },
   {
     id: "5",
     title: "Title-5",
     body: "5-Some quick example text to build on the card title and make up the bulk of the card's content.",
     reactions: 0,
-    tags: [],
-    userId: "",
+    tags: ["asda"],
+    userId: "user-1",
   },
 ];
 
