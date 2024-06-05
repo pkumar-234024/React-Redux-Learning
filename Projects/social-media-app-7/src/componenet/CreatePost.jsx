@@ -37,7 +37,7 @@ const CreatePost = () => {
   return (
     <form className="creat-post" onSubmit={handleSubmit}>
       <div className="mb-3">
-        <label htmlFor="userId" className="form-label">
+        <label htmlFor="foruserId" className="form-label">
           Enter your User Id here
         </label>
         <input
@@ -51,7 +51,7 @@ const CreatePost = () => {
       </div>
 
       <div className="mb-3">
-        <label htmlFor="title" className="form-label">
+        <label htmlFor="fortitle" className="form-label">
           Post Title
         </label>
         <input
@@ -64,7 +64,7 @@ const CreatePost = () => {
       </div>
 
       <div className="mb-3">
-        <label htmlFor="body" className="form-label">
+        <label htmlFor="forbody" className="form-label">
           Post Content
         </label>
         <textarea
@@ -78,13 +78,13 @@ const CreatePost = () => {
       </div>
 
       <div className="mb-3">
-        <label htmlFor="reactions" className="form-label">
+        <label htmlFor="forreactions" className="form-label">
           Numder Of reaction
         </label>
         <input
           type="text"
           className="form-control"
-          id="userId"
+          id="reactions"
           ref={reationsElement}
           placeholder="How many people reacted to this"
         />
