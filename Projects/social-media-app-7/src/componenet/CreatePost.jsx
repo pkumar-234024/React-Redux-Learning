@@ -14,7 +14,7 @@ const CreatePost = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    /*isugsiuvhdilfgbhdfo;vbouegvdingu;odfbnoad; */
     console.log("submit handle clicked");
     const userId = userIdElement.current.value;
     const postTitle = postTitleElement.current.value;
