@@ -1,26 +1,24 @@
-import { createContext, useReducer } from "react";
-import { DefaultContext } from "react-icons/lib";
+import {
+  createContext,
+  useCallback,
+  useMemo,
+  useReducer,
+  useEffect,
+  useState,
+} from "react";
 
 export const PostList = createContext({
   postList: [],
   addPost: () => {},
   deletePost: () => {},
-  addMassPost: () => {},
+  fetching: false,
 });
 
 const PostListReducer = (currPostList, action) => {
   let newPostList = currPostList;
 
   if (action.type === "ADD_POST") {
-    const newPost = {
-      id: currPostList.length + 1,
-      title: action.payload.postTitle,
-      body: action.payload.postBody,
-      reaction: action.payload.reactions,
-      tags: action.payload.tags,
-      userId: currPostList.length + 100,
-    };
-    newPostList = [...currPostList, newPost];
+    newPostList = [action.payload.post, ...currPostList];
   } else if (action.type === "ADD_MASS_POST") {
     newPostList = action.payload.posts;
   } else if (action.type === "DELETE_POST") {
@@ -32,15 +30,16 @@ const PostListReducer = (currPostList, action) => {
 };
 
 const PostListProvider = ({ children }) => {
-  const addPost = ({ userId, postBody, postTitle, reactions, tags }) => {
+  const [postList, disPatchPostList] = useReducer(PostListReducer, []);
+  const [fetching, setFetching] = useState(false);
+  const controller = new AbortController();
+  const signal = controller.signal;
+
+  const addPost = (post) => {
     disPatchPostList({
       type: "ADD_POST",
       payload: {
-        userId,
-        postBody,
-        postTitle,
-        reactions,
-        tags,
+        post,
       },
     });
   };
@@ -54,18 +53,36 @@ const PostListProvider = ({ children }) => {
     });
   };
 
-  const deletePost = (postId) => {
-    disPatchPostList({
-      type: "DELETE_POST",
-      payload: {
-        postId,
-      },
-    });
-  };
-  const [postList, disPatchPostList] = useReducer(PostListReducer, []);
+  const deletePost = useCallback(
+    (postId) => {
+      disPatchPostList({
+        type: "DELETE_POST",
+        payload: {
+          postId,
+        },
+      });
+    },
+    [disPatchPostList]
+  );
 
+  useEffect(() => {
+    setFetching(true);
+    fetch("https://dummyjson.com/posts")
+      .then((res) => res.json())
+      .then((data) => {
+        addMassPost(data.posts);
+        setFetching(false);
+      });
+
+    return () => {
+      controller.abort();
+    };
+  }, []);
+  //  //useMemo
+  //   const arr = [5, 4, 3, 2, 1];
+  //   const sortedArray = useMemo(() => arr.sort(), [arr]);
   return (
-    <PostList.Provider value={{ postList, addPost, deletePost, addMassPost }}>
+    <PostList.Provider value={{ postList, addPost, deletePost, fetching }}>
       {children}
     </PostList.Provider>
   );

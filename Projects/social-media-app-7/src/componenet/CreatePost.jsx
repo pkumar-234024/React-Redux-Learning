@@ -1,10 +1,11 @@
 import { useContext } from "react";
 import { useRef } from "react";
 import { PostList } from "../store/post-list-store";
+import { useNavigate } from "react-router-dom";
 
 const CreatePost = () => {
   const { addPost } = useContext(PostList);
-
+  const navigate = useNavigate();
   const userIdElement = useRef();
   const postTitleElement = useRef();
   const postBodyElement = useRef();
@@ -14,6 +15,7 @@ const CreatePost = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    console.log("submit handle clicked");
     const userId = userIdElement.current.value;
     const postTitle = postTitleElement.current.value;
     const postBody = postBodyElement.current.value;
@@ -26,13 +28,23 @@ const CreatePost = () => {
     reationsElement.current.value = "";
     tagsElement.current.value = "";
 
-    addPost({
-      userId,
-      postBody,
-      postTitle,
-      reactions,
-      tags,
-    });
+    fetch("https://dummyjson.com/posts/add", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: postTitle,
+        body: postBody,
+        userId: userId,
+        reactions: reactions,
+        tags: tags,
+        /* other post data */
+      }),
+    })
+      .then((res) => res.json())
+      .then((resObj) => {
+        addPost(resObj);
+        navigate("/");
+      });
   };
   return (
     <form className="creat-post" onSubmit={handleSubmit}>

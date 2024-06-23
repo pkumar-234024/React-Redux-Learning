@@ -1,13 +1,14 @@
-import Header from "./componenet/Header";
-import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-import Footer from "./componenet/Footer";
-import Sidebar from "./componenet/Sidebar";
-import CreatePost from "./componenet/CreatePost";
-import PostList from "./componenet/PostList";
+import Header from "../componenet/Header";
+import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
+import Footer from "../componenet/Footer";
+import Sidebar from "../componenet/Sidebar";
+import CreatePost from "../componenet/CreatePost";
+import PostList from "../componenet/PostList";
 import { useState, useContext } from "react";
-import PostListProvider from "./store/post-list-store";
+import PostListProvider from "../store/post-list-store";
 import "./App.css";
-import WelcomeMessage from "./componenet/WelcomeMessage";
+import WelcomeMessage from "../componenet/WelcomeMessage";
+import { Outlet } from "react-router-dom";
 function App() {
   const [selectedTab, setSelectedTab] = useState("Home");
 
@@ -18,7 +19,7 @@ function App() {
           <Sidebar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
           <div className="content">
             <Header />
-            {selectedTab === "Home" ? <PostList /> : <CreatePost />}
+            <Outlet />
             <Footer />
           </div>
         </div>

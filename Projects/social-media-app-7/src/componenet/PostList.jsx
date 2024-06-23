@@ -1,30 +1,12 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import Post from "./Post";
 import { PostList as PostListData } from "../store/post-list-store";
 import WelcomeMessage from "./WelcomeMessage";
 import LoadingSpinner from "./LoadingSpinner";
 
 const PostList = () => {
-  const { postList, addMassPost } = useContext(PostListData);
-  const [fetching, setFetching] = useState(false);
+  const { postList, fetching } = useContext(PostListData);
 
-  const controller = new AbortController();
-  const signal = controller.signal;
-
-  useEffect(() => {
-    setFetching(true);
-    fetch("https://dummyjson.com/posts")
-      .then((res) => res.json())
-      .then((data) => {
-        addMassPost(data.posts);
-        setFetching(false);
-      });
-
-    return () => {
-      controller.abort();
-      console.log("Elemenating post request");
-    };
-  }, []);
   return (
     <>
       {fetching && <LoadingSpinner />}
