@@ -11,7 +11,6 @@ export const PostList = createContext({
   postList: [],
   addPost: () => {},
   deletePost: () => {},
-  fetching: false,
 });
 
 const PostListReducer = (currPostList, action) => {
@@ -31,9 +30,9 @@ const PostListReducer = (currPostList, action) => {
 
 const PostListProvider = ({ children }) => {
   const [postList, disPatchPostList] = useReducer(PostListReducer, []);
-  const [fetching, setFetching] = useState(false);
-  const controller = new AbortController();
-  const signal = controller.signal;
+  // const [fetching, setFetching] = useState(false);
+  // const controller = new AbortController();
+  // const signal = controller.signal;
 
   const addPost = (post) => {
     disPatchPostList({
@@ -65,24 +64,24 @@ const PostListProvider = ({ children }) => {
     [disPatchPostList]
   );
 
-  useEffect(() => {
-    setFetching(true);
-    fetch("https://dummyjson.com/posts")
-      .then((res) => res.json())
-      .then((data) => {
-        addMassPost(data.posts);
-        setFetching(false);
-      });
+  // useEffect(() => {
+  //   setFetching(true);
+  //   fetch("https://dummyjson.com/posts", { signal })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       addMassPost(data.posts);
+  //       setFetching(false);
+  //     });
 
-    return () => {
-      controller.abort();
-    };
-  }, []);
+  //   return () => {
+  //     controller.abort();
+  //   };
+  // }, []);
   //  //useMemo
   //   const arr = [5, 4, 3, 2, 1];
   //   const sortedArray = useMemo(() => arr.sort(), [arr]);
   return (
-    <PostList.Provider value={{ postList, addPost, deletePost, fetching }}>
+    <PostList.Provider value={{ postList, addPost, deletePost }}>
       {children}
     </PostList.Provider>
   );
